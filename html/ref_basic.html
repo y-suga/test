@@ -1,0 +1,762 @@
+<style type="text/css">
+  pre { border:solid 1px #000000; border-color: #FFFFFF; }
+  body { background-color: #000000; color: #FFFFFF; }
+  a { color: orange; text-decoration: none; }
+  a:hover { text-decoration: underline }
+</style>
+編集中
+<div>
+  <h3>目次</h3>
+  <ul id="menu">
+  </ul>
+</div>
+<div>
+  <div>
+    <hr />
+    <h2 id="browser">ブラウザ</h2>
+    <pre>
+# ブラウザの起動
+driver = Selenium::WebDriver.for :firefox
+driver = Selenium::WebDriver.for :internet_explorer # :ie でも可
+driver = Selenium::WebDriver.for :chrome
+driver = Selenium::WebDriver.for :safari
+
+# Chromeのモバイルエミュレータの起動
+mobile_emulation = { "deviceName" => "Google Nexus 5" }
+chrome_options = { "chromeOptions" => { "mobileEmulation" => mobile_emulation } }
+caps = Selenium::WebDriver::Remote::Capabilities.chrome(chrome_options)
+driver = Selenium::WebDriver.for :chrome, desired_capabilities: caps
+
+# ブラウザの種類を取得
+driver.browser #=> :firefox or :chrome or :internet_explorer or :safari
+
+# ブラウザの終了
+driver.quit
+
+# ページを開く
+driver.get("http://www.example.com")
+
+# 進む
+driver.navigate.forward
+
+# 戻る
+driver.navigate.back
+
+# 更新・再読み込み
+driver.navigate.refresh
+    </pre>
+  </div>
+    <div>
+    <hr />
+    <h2 id="screenshot">スクリーンショットの撮影</h2>
+    <pre>
+# スクリーンショットの撮影
+driver.save_screenshot("hoge.png")
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="mouse">マウス</h2>
+    <pre>
+# 要素を左クリック
+driver.find_element(:name, "button").click
+
+# -----------------------------------------
+# 以下のNativeEventでの操作はSafariではサポートしていない(2015/08/04現在)
+# Firefoxではブラウザのバージョンアップ時に利用できなくなることが多い
+# 参考
+# https://github.com/SeleniumHQ/selenium/blob/master/rb/lib/selenium/webdriver/common/action_builder.rb
+# -----------------------------------------
+
+# マウスの左クリックを押した状態にする
+driver.action.click_and_hold(driver.find_element(:name, "textbox")).perform
+driver.action.click_and_hold.perform
+
+# マウスの左クリックを放す
+driver.action.release(driver.find_element(:name, "textbox")).perform
+driver.action.release.perform
+
+# 左クリック
+driver.action.click(driver.find_element(:name, "textbox")).perform
+driver.action.click.perform
+
+# 左ダブルクリック
+driver.action.double_click(driver.find_element(:name, "textbox")).perform
+driver.action.double_click.perform
+
+# 右クリック
+driver.action.context_click(driver.find_element(:name, "textbox")).perform
+driver.action.context_click.perform
+
+# マウスカーソルの移動
+driver.action.move_to(driver.find_element(:link, "link_text")).perform
+driver.action.move_to(driver.find_element(:link, "link_text"), 100, 100).perform
+driver.action.move_by(-100, -100).perform
+
+# ドラッグアンドドロップ
+el1 = driver.find_element(:name, "checkbox")
+el2 = driver.find_element(:name, "select")
+driver.action.drag_and_drop(el1, el2).perform
+driver.action.drag_and_drop_by(driver.find_element(:name, "button"), 100, 100).perform
+
+# ------------------------------------------------
+# NativeEventの操作は以下のように連結して実行できる
+# driver.action.command1.command2....perform
+# ------------------------------------------------
+
+# Shiftキーを押しながらクリック
+driver.action.key_down(:shift).click(driver.find_element(:link, "link_text")).key_up(:shift).perform
+
+# リンクを新しいウィンドウで開く（Firefox）
+# 右クリックし、下矢印キーを押し、エンターキーを押す
+driver.action.context_click(driver.find_element(:link, "link_text")).send_keys(:arrow_down).send_keys(:enter).perform
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="keyboard">キー入力</h2>
+    <pre>
+# 要素に対してキー入力
+# 文字列以外のキー入力は以下を参照
+# https://github.com/SeleniumHQ/selenium/blob/master/rb/lib/selenium/webdriver/common/keys.rb
+driver.find_element(:name, "textbox").send_keys "text"
+driver.find_element(:link, "link_text").send_keys :enter
+
+# -----------------------------------------
+# 以下のNativeEventでの操作はSafariではサポートしていない(2015/08/04現在)
+# Firefoxではブラウザのバージョンアップ時に利用できなくなることが多い
+# 参考
+# https://github.com/SeleniumHQ/selenium/blob/master/rb/lib/selenium/webdriver/common/action_builder.rb
+# -----------------------------------------
+
+# キーを押した状態にする
+# 以下のキーのみ利用可能
+# :shift, :alt, :control, :command, :meta
+driver.action.key_down(:alt).perform
+
+# キーを放す
+# 以下のキーのみ利用可能
+# :shift, :alt, :control, :command, :meta
+driver.action.key_up(:alt).perform
+
+# キーを入力
+# 入力可能キーは任意の文字列の他、以下のリンクを参照
+# https://github.com/SeleniumHQ/selenium/blob/master/rb/lib/selenium/webdriver/common/keys.rb
+driver.action.send_keys("text").perform
+
+# ------------------------------------------------
+# NativeEventの操作は以下のように連結して実行できる
+# driver.action.command1.command2....perform
+# ------------------------------------------------
+
+# Shiftキーを押しながらクリック
+driver.action.key_down(:shift).click(driver.find_element(:link, "link_text")).key_up(:shift).perform
+
+# リンクを新しいウィンドウで開く（Firefox）
+# 右クリックし、下矢印キーを押し、エンターキーを押す
+driver.action.context_click(driver.find_element(:link, "link_text")).send_keys(:arrow_down).send_keys(:enter).perform
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="url">URL</h2>
+    <pre>
+# ページを開く
+driver.get("http://www.example.com")
+
+# URLを取得
+driver.current_url
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="title">タイトル</h2>
+    <pre>
+# Titleを取得
+driver.title
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="view">画面表示</h2>
+    <pre>
+# スクリーンショットの撮影
+driver.save_screenshot("hoge.png")
+
+# ブラウザ上でスクロールしているX座標を取得
+driver.execute_script("return document.body.scrollLeft || document.documentElement.scrollLeft")
+    
+# ブラウザ上でスクロールしているY座標を取得
+driver.execute_script("return document.body.scrollTop || document.documentElement.scrollTop")
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="element">要素（タグ）</h2>
+    <pre>
+# 特定の要素内の要素を指定
+driver.find_element(:id, "menu").find_element(:link, "URL").click
+
+# 要素の位置までスクロール
+driver.find_element(:name, "button").location_once_scrolled_into_view
+
+# 要素の数を取得
+driver.find_elements(:css, "a").size
+
+# 要素の有無を取得
+driver.find_elements(:name, "textbox").size > 0
+
+# 要素の表示・非表示を取得
+driver.find_element(:name, "textbox").displayed?
+
+# 要素の属性値を取得
+driver.find_element(:link, "link_text").attribute("href")
+
+# 要素の座標を取得
+driver.find_element(:name, "textbox").location.x
+driver.find_element(:name, "textbox").location.y
+
+# 要素のサイズを取得
+driver.find_element(:id, "iframe").size.width
+driver.find_element(:id, "iframe").size.height
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="source">ソースコード</h2>
+    <pre>
+# ソースコードを取得（javascript実行前の生のソースコード）
+driver.page_source
+
+# ソースコードを取得（javascript実行後のソースコード）
+driver.find_element(:css, "html").attribute("innerHTML")
+
+# 要素内のソースコードを取得
+driver.find_element(:css, "div").attribute("innerHTML")
+
+# ソースコードの有無を取得
+driver.find_element(:css, "body").attribute("innerHTML").index('&lt;h2 id="textbox"&gt;テキストボックス&lt/h2&gt') # 見つからない場合はnil
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="text">テキスト</h2>
+    <pre>
+# テキストを取得
+driver.find_element(:css, "body").text
+
+# ページ内のテキストの有無を取得
+driver.find_element(:css, "body").text.index("text") != nil
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="link">リンク</h2>
+    <div>
+      <a href="http://yssgtest.blogspot.jp/">link_text</a>
+    </div>
+    <pre>
+# リンクをクリック
+driver.find_element(:link, "link_text").click
+
+# リンクをクリック（部分一致指定）
+driver.find_element(:partial_link_text, "link_t").click
+
+# リンクを擬似クリック
+driver.find_element(:link, "link_text").send_keys :enter
+
+# リンク先URLを取得（href属性値）
+driver.find_element(:link, "link_text").attribute("href")
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="form">フォーム</h2>
+    <div>
+      <form>
+        <input name="form-textbox" size ="20" type="text" />
+        <input type="submit" value="submit" />
+      </form>
+    </div>
+    <pre>
+# フォームをSubmitする
+driver.find_element(:name, "form-textbox").submit
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="textbox">テキストボックス</h2>
+    <div>
+      <input name="textbox" size="20" type="text" value="" />
+      <input disabled="" name="textbox2" size="20" type="text" value="disabled" />
+      <input name="textbox3" readonly="" size="20" type="text" value="readonly" />
+    </div>
+    <pre>
+# テキストボックスをクリア
+driver.find_element(:name, "textbox").clear
+
+# 文字を追加入力
+driver.find_element(:name, "textbox").send_keys "text"
+
+# エンターキーを押す
+driver.find_element(:name, "textbox").send_keys :enter
+
+# 入力文字を取得
+driver.find_element(:name, "textbox").attribute("value")
+
+# 活性・非活性を取得
+driver.find_element(:name, "textbox").enabled?
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="password-field">パスワードフィールド</h2>
+    <div>
+      <input name="password" size="20" type="password" />
+      <input disabled="" name="password2" size="20" type="password" value="disabled" />
+      <input name="password3" readonly="" size="20" type="password" value="readonly" />
+    </div>
+    <pre>
+# テキストボックスをクリア
+driver.find_element(:name, "password").clear
+
+# 文字を入力
+driver.find_element(:name, "password").send_keys "text"
+
+# 入力文字を取得
+driver.find_element(:name, "password").attribute("value")
+
+# 活性・非活性を取得
+driver.find_element(:name, "password").enabled?
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="textarea">テキストエリア</h2>
+    <div>
+      <textarea cols="40" name="textarea" rows="2"></textarea>
+      <textarea cols="40" disabled="" name="textarea2" rows="2">disabled</textarea>
+      <textarea cols="40" name="textarea3" readonly="" rows="2">readonly</textarea>
+    </div>
+    <pre>
+# テキストエリアをクリア
+driver.find_element(:name, "textarea").clear
+
+# 文字を入力
+driver.find_element(:name, "textarea").send_keys "text"
+
+# 入力文字を取得
+driver.find_element(:name, "textarea").attribute("value")
+
+# 活性・非活性を取得
+driver.find_element(:name, "textarea").enabled?
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="file-field">ファイルフィールド</h2>
+    <div>
+      <input name="file" type="file" />
+      <input disabled="" name="file2" type="file" />
+    </div>
+    <pre>
+# ファイルフィールドをクリアはできない
+driver.find_element(:name, "file").clear #=> error
+
+# ファイル選択
+# Windowsの場合、Firefox, IEはフォルダ階層は¥区切りのみ対応
+file = "C:/hoge/hoge.txt"
+driver.find_element(:name, "file").send_keys file.gsub("/", "¥¥")
+driver.find_element(:name, "file").send_keys "C:/hoge/hoge.txt"
+
+# 入力文字を取得
+driver.find_element(:name, "file").attribute("value")
+
+# 活性・非活性を取得
+driver.find_element(:name, "file").enabled?
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="radio">ラジオボタン</h2>
+    <div>
+      <input name="radio" type="radio" value="radio1" />
+      <label>radio</label><br />
+      <input checked="" name="radio" type="radio" value="radio2" />
+      <label>checked</label><br />
+      <input disabled="" name="radio" type="radio" value="radio3" />
+      <label>disabled</label>
+    </div>
+    <pre>
+# クリック
+driver.find_element(:name, "radio").click
+
+# 選択・未選択を取得
+driver.find_element(:name, "radio").selected?
+
+# 活性・非活性を取得
+driver.find_element(:name, "radio").enabled?
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="checkbox">チェックボックス</h2>
+    <div>
+      <input name="checkbox" type="checkbox" value="checkbox1" />
+      <label>checkbox</label><br />
+      <input checked="" name="checkbox2" type="checkbox" value="checkbox2" />
+      <label>checked</label><br />
+      <input disabled="" name="checkbox3" type="checkbox" value="checkbox3" />
+      <label>disabled</label>
+    </div>
+    <pre>
+# クリック
+driver.find_element(:name, "checkbox").click
+
+# 擬似クリック
+driver.find_element(:name, "checkbox").send_keys :space
+
+# 選択・未選択を取得
+driver.find_element(:name, "checkbox").selected?
+
+# 活性・非活性を取得
+driver.find_element(:name, "checkbox").enabled?
+
+# 選択状態にする（未選択状態の場合のみクリック）
+checkbox = driver.find_element(:name, "checkbox")
+checkbox.click unless(checkbox.selected?)
+
+# 未選択状態にする（選択状態の場合のみクリック）
+checkbox = driver.find_element(:name, "checkbox")
+checkbox.click if(checkbox.selected?)
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="dropdown">ドロップダウン（プルダウン）</h2>
+    <div>
+      <select name="select">
+        <option value="option1">option1</option>
+        <option value="option2">option2</option>
+        <option value="option3">option3</option>
+        <option value="option4">option4</option>
+      </select>
+      <select name="select2">
+        <option value="option1">option1</option>
+        <option selected="" value="option2">selected</option>
+        <option value="option3">option3</option>
+        <option value="option4">option4</option>
+      </select>
+      <select disabled="" name="select2">
+        <option value="option1">disabled</option>
+        <option value="option2">option2</option>
+        <option value="option3">option3</option>
+        <option value="option4">option4</option>
+      </select>
+      <select name="select3">
+        <optgroup label="optgroup1">
+          <option>optgroup1_1</option>
+          <option>optgroup1_2</option>
+          <option>optgroup1_3</option>
+          <option>optgroup1_4</option>
+        </optgroup>
+        <optgroup label="optgroup2">
+          <option>optgroup2_1</option>
+          <option>optgroup2_2</option>
+          <option>optgroup2_3</option>
+          <option>optgroup2_4</option>
+        </optgroup>
+        <optgroup label="optgroup3">
+          <option>optgroup3_1</option>
+          <option>optgroup3_2</option>
+          <option>optgroup3_3</option>
+          <option>optgroup3_4</option>
+        </optgroup>
+      </select>
+    </div>
+    <pre>
+# ドロップダウンを選択する（テキスト指定）
+Selenium::WebDriver::Support::Select.new(driver.find_element(:name, "select")).select_by(:text, "text")
+
+# ドロップダウンを選択する（index指定）
+Selenium::WebDriver::Support::Select.new(driver.find_element(:name, "select")).select_by(:index, 1)
+
+# ドロップダウンを選択する（value指定）
+Selenium::WebDriver::Support::Select.new(driver.find_element(:name, "select")).select_by(:value, "value")
+
+# ドロップダウンを選択する（矢印キー指定）
+driver.find_element(:name, "select").send_keys :arrow_down
+driver.find_element(:name, "select").send_keys :arrow_up
+
+# 選択中のドロップダウンのテキストを取得
+Selenium::WebDriver::Support::Select.new(driver.find_element(:name, "select")).first_selected_option.text
+
+# 活性・非活性を取得
+driver.find_element(:name, "select").enabled?
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="list">マルチセレクト</h2>
+    <div>
+      <select multiple name="multi-select" size="3">
+        <option value="option1">option1</option>
+        <option selected="" value="option2">selected</option>
+        <option disabled="" value="option3">disabled</option>
+      </select>
+      <select multiple disabled="" name="multi-select2" size="3">
+        <option value="option1">disabled1</option>
+        <option value="option2">disabled2</option>
+        <option value="option3">disabled3</option>
+      </select>
+      <select multiple="" name="multi-select3" size="3">
+        <option selected="" value="option1">multiple1</option>
+        <option value="option2">multiple2</option>
+        <option selected="" value="option3">multiple3</option>
+      </select>
+    </div>
+    <pre>
+# マルチセレクトを選択する（テキスト指定）
+Selenium::WebDriver::Support::Select.new(driver.find_element(:name, "multi-select")).select_by(:text, "text")
+
+# マルチセレクトを選択する（index指定）
+Selenium::WebDriver::Support::Select.new(driver.find_element(:name, "multi-select")).select_by(:index, 1)
+
+# マルチセレクトを選択する（value指定）
+Selenium::WebDriver::Support::Select.new(driver.find_element(:name, "multi-select")).select_by(:value, "value")
+
+# マルチセレクトを全て選択
+Selenium::WebDriver::Support::Select.new(driver.find_element(:name, "multi-select")).select_all
+
+# マルチセレクトを未選択にする（テキスト指定）
+Selenium::WebDriver::Support::Select.new(driver.find_element(:name, "multi-select")).deselect_by(:text, "text")
+
+# マルチセレクトを未選択にする（index指定）
+Selenium::WebDriver::Support::Select.new(driver.find_element(:name, "multi-select")).deselect_by(:index, 1)
+
+# マルチセレクトを未選択にする（value指定）
+Selenium::WebDriver::Support::Select.new(driver.find_element(:name, "multi-select")).deselect_by(:value, "value")
+
+# マルチセレクトを全て未選択にする
+Selenium::WebDriver::Support::Select.new(driver.find_element(:name, "multi-select")).deselect_all
+
+# 選択・未選択を取得
+
+# 活性・非活性を取得
+driver.find_element(:name, "multi-select").enabled?
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="button">ボタン</h2>
+    <div>
+      <input type="submit" value="type=submit" />
+      <input type="reset" value="type=reset" />
+      <input type="button" value="type=button" />
+      <input disabled="" type="button" value="disabled" />
+      <button name="button">&lt;button&gt;</button>
+    </div>
+    <pre>
+# クリック
+driver.find_element(:name, "button").click
+
+# 擬似クリック
+driver.find_element(:name, "button").send_keys :enter
+
+# 活性・非活性を取得
+driver.find_element(:name, "button").enabled?
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="dialog">ダイアログ</h2>
+    <div>
+      <button onclick="alert('Hello Alert')">alert</button>
+      <button onclick="confirm('Hello Confirmation')">confirm</button>
+      <button onclick="prompt('Hello Prompt')">prompt</button>
+    </div>
+    <pre>
+# OKをクリック
+driver.switch_to.alert.accept
+
+# Cancelをクリック
+driver.switch_to.alert.dismiss
+
+# 文字を入力
+driver.switch_to.alert.send_keys "text"
+
+# テキストを取得
+driver.switch_to.alert.text
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="frame">フレーム</h2>
+    <div>
+      <iframe id="iframe" src="ref.html">
+        この部分は iframe 対応のブラウザで見てください。
+      </iframe>
+    </div>
+    <pre>
+# フレームを切り替える
+driver.switch_to.frame(driver.find_element(:id, "iframe"))
+
+# フレームをデフォルトのものに切り替える
+driver.switch_to.default_content
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="window">ウィンドウ</h2>
+    <div>
+      <a href="http://yssgtest.blogspot.jp/" target="_blank">New Window</a>
+    </div>
+    <pre>
+# 他のウィンドウに切り替える
+driver.window_handles.each do |handle|
+  driver.switch_to.window handle
+  break
+end
+
+# ウィンドウを閉じる
+driver.close
+
+# ウィンドウサイズを変更する
+driver.manage.window.resize_to(500, 800)
+
+# ウィンドウサイズを最大化する
+driver.manage.window.maximize
+
+# ウィンドウを移動する
+driver.manage.window.move_to(300, 400)
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="cookie">クッキー</h2>
+    <pre>
+# クッキーを追加
+# 以下のパラメータの指定も可能
+# :path => String, :secure -> Boolean, :expires -> Time, DateTime, or seconds since epoch
+# 追加するクッキーのドメインと同じドメインのページへ遷移した状態でないと追加できない
+driver.get "http://www.example.com"
+driver.manage.add_cookie(:name => 'key', :value => 'value')
+
+# クッキーを取得
+driver.manage.cookie_named("CookieName")
+
+# 全てのクッキーを取得出力
+driver.manage.all_cookies
+
+# クッキーの修正
+# 修正というメソッドはないため、削除、追加で代用する
+cookie = driver.manage_cookie_named("CookieName")
+cookie[:value] = "change_value"
+driver.manage.delete_cookie("CookieName")
+driver.manage.add_cookie(cookie)
+
+# クッキーを削除
+driver.manage.delete_cookie "CookieName"
+
+# クッキーを全て削除
+driver.manage.delete_all_cookies 
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="javascript">Javascript</h2>
+    <pre>
+# Javascriptの実行
+driver.execute_script("alert('hoge')")
+
+# Javascriptの実行(WebElement利用)
+element = driver.find_element(:css, "body")
+driver.execute_script("return arguments[0].tagName", element) #=> "BODY"
+
+# Javascriptの実行結果を取得
+# javascriptの最後にreturn文を記載する
+element = driver.execute_script("return document.body")
+driver.execute_script("return arguments[0].tagName", element) #=> "BODY"
+    </pre>
+  </div>
+  <div>
+    <hr />
+    <h2 id="native-event">NativeEventでの操作</h2>
+    <pre>
+# -----------------------------------------
+# 以下のNativeEventでの操作はSafariではサポートしていない(2015/08/04現在)
+# Firefoxではブラウザのバージョンアップ時に利用できなくなることが多い
+# 参考
+# https://github.com/SeleniumHQ/selenium/blob/master/rb/lib/selenium/webdriver/common/action_builder.rb
+# -----------------------------------------
+
+# キーを押した状態にする
+# 以下のキーのみ利用可能
+# :shift, :alt, :control, :command, :meta
+driver.action.key_down(:alt).perform
+
+# キーを放す
+# 以下のキーのみ利用可能
+# :shift, :alt, :control, :command, :meta
+driver.action.key_up(:alt).perform
+
+# キーを入力
+# 入力可能キーは任意の文字列の他、以下のリンクを参照
+# https://github.com/SeleniumHQ/selenium/blob/master/rb/lib/selenium/webdriver/common/keys.rb
+driver.action.send_keys("text").perform
+
+# マウスの左クリックを押した状態にする
+driver.action.click_and_hold(driver.find_element(:name, "textbox")).perform
+driver.action.click_and_hold.perform
+
+# マウスの左クリックを放す
+driver.action.release(driver.find_element(:name, "textbox")).perform
+driver.action.release.perform
+
+# 左クリック
+driver.action.click(driver.find_element(:name, "textbox")).perform
+driver.action.click.perform
+
+# 左ダブルクリック
+driver.action.double_click(driver.find_element(:name, "textbox")).perform
+driver.action.double_click.perform
+
+# 右クリック
+driver.action.context_click(driver.find_element(:name, "textbox")).perform
+driver.action.context_click.perform
+
+# マウスカーソルの移動
+driver.action.move_to(driver.find_element(:link, "link_text")).perform
+driver.action.move_to(driver.find_element(:link, "link_text"), 100, 100).perform
+driver.action.move_by(-100, -100).perform
+
+# ドラッグアンドドロップ
+el1 = driver.find_element(:name, "checkbox")
+el2 = driver.find_element(:name, "select")
+driver.action.drag_and_drop(el1, el2).perform
+driver.action.drag_and_drop_by(driver.find_element(:name, "button"), 100, 100).perform
+
+# ------------------------------------------------
+# NativeEventの操作は以下のように連結して実行できる
+# driver.action.command1.command2....perform
+# ------------------------------------------------
+
+# Shiftキーを押しながらクリック
+driver.action.key_down(:shift).click(driver.find_element(:link, "link_text")).key_up(:shift).perform
+
+# リンクを新しいウィンドウで開く（Firefox）
+# 右クリックし、下矢印キーを押し、エンターキーを押す
+driver.action.context_click(driver.find_element(:link, "link_text")).send_keys(:arrow_down).send_keys(:enter).perform
+    </pre>
+  </div>
+</div>
+<script type="text/javascript">
+  <!--
+    var menu = "";
+    elems = document.getElementsByTagName("h2");
+    for(i = 0; i < elems.length; i++){
+     menu = menu + '<li><a href="#' + elems[i].getAttribute("id") + '">' + elems[i].innerHTML+ '</a></li>';
+    }
+    document.getElementById("menu").innerHTML = menu;
+  -->
+</script>

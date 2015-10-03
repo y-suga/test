@@ -1,0 +1,95 @@
+<style type="text/css">
+  pre { border:solid 1px #000000; border-color: #FFFFFF; }
+  body { background-color: #000000; color: #FFFFFF; }
+  a { color: orange; text-decoration: none; }
+  a:hover { text-decoration: underline }
+</style>
+    <h1>form</h1>
+    <hr />
+    <h2 id="link">リンク</h2>
+    <div>
+      <a href="http://yssgtest.blogspot.jp/">link_text</a>
+    </div>
+    <hr />
+    <h2 id="textbox">テキストボックス</h2>
+    <div>
+      <input name="textbox" size="20" type="text" value="" />
+    </div>
+    <hr />
+    <h2 id="password-field">パスワードフィールド</h2>
+    <div>
+      <input name="password" size="20" type="password" />
+    </div>
+    <hr />
+    <h2 id="textarea">テキストエリア</h2>
+    <div>
+      <textarea cols="40" name="textarea" rows="2"></textarea>
+    </div>
+    <hr />
+    <h2 id="file-field">ファイルフィールド</h2>
+    <div>
+      <input name="file" type="file" />
+    </div>
+    <hr />
+    <h2 id="radio">ラジオボタン</h2>
+    <div>
+      <input name="radio" type="radio" value="radio1" />
+      <label>radio</label><br />
+      <input checked="" name="radio" type="radio" value="radio2" />
+      <label>checked</label><br />
+      <input disabled="" name="radio" type="radio" value="radio3" />
+      <label>disabled</label>
+    </div>
+    <hr />
+    <h2 id="checkbox">チェックボックス</h2>
+    <div>
+      <input name="checkbox" type="checkbox" value="checkbox1" />
+      <label>checkbox</label><br />
+      <input checked="" name="checkbox2" type="checkbox" value="checkbox2" />
+      <label>checked</label><br />
+      <input disabled="" name="checkbox3" type="checkbox" value="checkbox3" />
+      <label>disabled</label>
+    </div>
+    <hr />
+    <h2 id="dropdown">ドロップダウン（プルダウン）</h2>
+    <div>
+      <select name="select">
+        <option value="option1">option1</option>
+        <option value="option2">option2</option>
+        <option value="option3">option3</option>
+        <option value="option4">option4</option>
+      </select>
+    </div>
+    <hr />
+    <h2 id="list">リスト</h2>
+    <div>
+      <select name="multi-select" size="3" multiple>
+        <option value="option1">option1</option>
+        <option selected="" value="selected">selected</option>
+        <option disabled="" value="disabled">disabled</option>
+      </select>
+    </div>
+    <hr />
+    <h2 id="button">ボタン</h2>
+    <div>
+      <button name="button">&lt;button&gt;</button>
+    </div>
+    <hr />
+    <h2 id="dialog">ダイアログ</h2>
+    <div>
+      <button onclick="alert('Hello Alert')">alert</button>
+      <button onclick="confirm('Hello Confirmation')">confirm</button>
+      <button onclick="prompt('Hello Prompt')">prompt</button>
+    </div>
+    <hr />
+    <h2 id="frame">フレーム</h2>
+    <div>
+      <iframe id="iframe" src="iframe.html">
+        この部分は iframe 対応のブラウザで見てください。
+      </iframe>
+    </div>
+    <hr />
+    <h2 id="window">ウィンドウ</h2>
+    <div>
+      <a href="http://yssgtest.blogspot.jp/" target="_blank">New Window</a>
+    </div>
