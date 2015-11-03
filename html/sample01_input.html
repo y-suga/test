@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <style type="text/css">
+      <!--
+      table{width:500px; border:solid 1px black;}
+      th{width:100px; border:solid 1px black;}
+      td{width:400px; border:solid 1px black; padding: 10 10 10 10}
+      -->
+    </style>
+  </head>
+  <body>
+    <h1>会員登録</h1>
+    <hr>
+    <form name="form" action="confirm.html" method="get">
+      <table>
+        <tr>
+          <th>
+            氏名
+          </th>
+          <td>
+            姓
+            <input type="text" name="lastName">
+            名
+            <input type="text" name="firstName">
+          </td>
+        </tr>
+        <tr>
+          <th>
+            性別
+          </th>
+          <td>
+            男性<input type="radio" name="gender" value="男性" selected>
+            女性<input type="radio" name="gender" value="女性">
+          </td>
+        </tr>
+        <tr>
+          <th>
+            生年
+          </th>
+          <td>
+            <select name="birthyear" id="birthyear">
+            </select>
+            年
+          </td>
+        </tr>
+      </table>
+      <hr>
+      <input type="submit" value="次へ">
+    </form>
+    <script type="text/javascript">
+      <!--
+        thisYear = new Date().getFullYear();
+        birthyear = "";
+        for(i = thisYear-100; i < thisYear; i++){
+          birthyear = birthyear + "<option>" + i + "</option>¥n"
+        }
+        birthyear = birthyear + "<option selected>" + thisYear + "</option>¥n"
+        document.getElementById("birthyear").innerHTML = birthyear;
+      -->
+    </script>
+  </body>
+</html>

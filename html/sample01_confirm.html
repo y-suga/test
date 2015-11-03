@@ -1,0 +1,85 @@
+<html>
+  <head>
+    <style type="text/css">
+      <!--
+        table{width:700px; border:solid 1px black;}
+        th{width:200px; border:solid 1px black;}
+        td{width:500px; border:solid 1px black;}
+      -->
+    </style>
+    <script type="text/javascript">
+      <!--
+        // HTMLエスケープ
+        function escapeHTML(html) {
+          var elem = document.createElement('div');
+          elem.appendChild(document.createTextNode(html));
+          return elem.innerHTML;
+        }
+
+        // 入力内容を表示するHTML
+        function getTableCode(){
+            tableCode = (function(){/*
+              <table>
+                <tr>
+                  <th>氏名</td>
+                  <td><span id="lastName"></span> <span id="firstName"></span></td>
+                </tr>
+                <tr>
+                  <th>性別</td>
+                  <td><span id="gender"></span></td>
+                </tr>
+                <tr>
+                  <th>生年</td>
+                  <td><span id="birthyear"></span>年</td>
+                </tr>
+              </table>
+              <hr>
+              <form name="confirm" action="finish.html" method="get">
+                <input type="submit" value="登録する">
+              </form>
+            */}).toString().match(/\/\*([^]*)\*\//)[1];
+            return tableCode;
+        }
+      -->
+    </script>
+  </head>
+  <body>
+    <h1>入力内容確認</h1>
+    <hr>
+    <p>
+      ページ読み込みを１〜１０秒待機します。（待機時間はランダム）
+    </p>
+    <p>
+      今回の待機時間は<span id="waitCount"></span>秒です。
+    </p>
+    <p>
+      ページ読み込み開始時刻：<span id="startTime"></span>
+    </p>
+    <p>
+      ページ読み込み終了時刻：<span id="endTime"></span>
+    </p>
+    <div id="table">
+    </div>
+    <script type="text/javascript">
+      <!--
+        document.getElementById("startTime").innerHTML = Date();
+        var count = 0;
+        var waitCount = Math.floor(Math.random() * 10);
+        document.getElementById("waitCount").innerHTML = waitCount + 1;
+        timerID = setInterval(function(){
+            count++;
+            if(count > waitCount){
+              document.getElementById("table").innerHTML = getTableCode();
+              params = location.search.substr(1).split("&");
+              for(var i in params){
+                param = params[i].split("=");
+                document.getElementById(param[0]).innerHTML = escapeHTML(decodeURI(param[1]));
+              }
+              clearInterval(timerID);
+              document.getElementById("endTime").innerHTML = Date();
+            }
+          }, 1000);  // polling time  = 1000ms
+      -->
+    </script>
+  </body>
+</html>
