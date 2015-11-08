@@ -185,7 +185,7 @@ driver.save_screenshot("hoge.png")
 
 # ブラウザ上でスクロールしているX座標を取得
 driver.execute_script("return document.body.scrollLeft || document.documentElement.scrollLeft")
-    
+
 # ブラウザ上でスクロールしているY座標を取得
 driver.execute_script("return document.body.scrollTop || document.documentElement.scrollTop")
     </pre>
@@ -593,7 +593,7 @@ driver.switch_to.alert.text
     <hr />
     <h2 id="frame">フレーム</h2>
     <div>
-      <iframe id="iframe" src="ref.html">
+      <iframe id="iframe" src="iframe.html">
         この部分は iframe 対応のブラウザで見てください。
       </iframe>
     </div>
@@ -659,7 +659,7 @@ driver.manage.add_cookie(cookie)
 driver.manage.delete_cookie "CookieName"
 
 # クッキーを全て削除
-driver.manage.delete_all_cookies 
+driver.manage.delete_all_cookies
     </pre>
   </div>
   <div>
