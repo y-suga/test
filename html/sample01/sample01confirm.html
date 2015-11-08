@@ -36,6 +36,12 @@
               </table>
               <hr>
               <form name="confirm" action="sample01finish.html" method="get">
+                <div style="display: none;">
+                  <input type="text" name="lastName">
+                  <input type="text" name="firstName">
+                  <input type="text" name="gender">
+                  <input type="text" name="birthyear">
+                </div>
                 <input type="submit" value="登録する">
               </form>
             */}).toString().match(/\/\*([^]*)\*\//)[1];
@@ -75,6 +81,7 @@
               for(var i in params){
                 param = params[i].split("=");
                 document.getElementById(param[0]).innerHTML = escapeHTML(decodeURI(param[1]));
+                document.getElementsByName(param[0])[0].value = decodeURI(param[1]);
               }
               clearInterval(timerID);
               document.getElementById("endTime").innerHTML = Date();
