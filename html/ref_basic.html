@@ -593,7 +593,7 @@ driver.switch_to.alert.text
     <hr />
     <h2 id="frame">フレーム</h2>
     <div>
-      <iframe id="iframe" src="iframe.html">
+      <iframe id="iframe" src="iframe.html#iframe">
         この部分は iframe 対応のブラウザで見てください。
       </iframe>
     </div>
@@ -635,6 +635,8 @@ driver.manage.window.move_to(300, 400)
     <hr />
     <h2 id="cookie">クッキー</h2>
     <pre>
+# Internet Explorer, Safariでは以下のコマンドは実行できない。
+
 # クッキーを追加
 # 以下のパラメータの指定も可能
 # :path => String, :secure -> Boolean, :expires -> Time, DateTime, or seconds since epoch
