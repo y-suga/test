@@ -46,6 +46,15 @@
       return null;
     }
 
+    function getUserData(id, key){
+      if(getUser(id) != null){
+        return getUser(id).match(new RegExp(key + ":[^,]*"))[0].replace(key + ":","");
+      }
+      else {
+        return null;
+      }
+    }
+
     function cookieToRecords(){
       var tmp_records = [];
       var cookies = document.cookie.split("; ");
