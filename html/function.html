@@ -1,0 +1,63 @@
+<script type="text/javascript">
+  <!--
+    records = [];
+    function initialize(){
+      var kanji = ["零","一","二","三","四","五","六","七","八","九"]
+      var gender = ["男性","女性"]
+      if(records.length == 0){
+        for(var i = 1; i < 6; i++){
+          insertUser("id" + ("0" + i).slice(-2), "password", "テスト", kanji[i], gender[i%2], "198"+i);
+        }
+      }
+    }
+
+    function login(id, pw){
+      user = getUser(id);
+      if(user == null){
+        return false;
+      }else if(user.indexOf("pw:" + pw + ",") >= 0){
+        document.cookie = "loginId=" + id;
+        return true;
+      }else{
+        return false;
+      }
+    }
+
+    function logout(){
+      //有効期限を過去にして書き込む
+      var dTime = new Date();
+      dTime.setYear(dTime.getYear() - 1);
+      document.cookie = "loginId=;expires=" + dTime.toGMTString();
+    }
+
+    function insertUser(id, pw, fName, lName, gender, bYear){
+      var tmp = ["id:"+id,"pw:"+pw,"fName:"+fName,"lName:"+lName,"gender:"+gender,"bYear:"+bYear];
+      var record = "record" + ("0" + (records.length + 1)).slice(-2) + "=" + tmp.join();
+      records.push(record);
+      document.cookie = record;
+    }
+
+    function getUser(id){
+      for(var i = 0; i < records.length; i++){
+        if(records[i].indexOf("id:"+id+",") > 0){
+          return records[i];
+        }
+      }
+      return null;
+    }
+
+    function cookieToRecords(){
+      var tmp_records = [];
+      var cookies = document.cookie.split("; ");
+      for(var i = 0; i < cookies.length; i++){
+        if(cookies[i].match(/record[0-9][0-9]/).length > 0){
+          tmp_records.push(cookies[i]);
+        }
+      }
+      return tmp_records;
+    }
+  -->
+</script>
+
+name=value;name=value;name=value
+recode01=id:test01,pw:pw01,fName:first,lName:last,gender:male,bYear:1983
