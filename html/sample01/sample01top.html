@@ -6,13 +6,115 @@
 </style>
 <script type="text/javascript">
   <!--
+    function initialize(){
+      var kanji = ["零番","一番","二番","三番","四番","五番","六番","七番","八番","九番"]
+      var gender = ["男性","女性"]
+      if(document.cookie.match(/record/) == null){
+        records = [];
+        for(var i = 1; i < 6; i++){
+          insertUser("id" + ("0" + i).slice(-2), "password", "テスト", kanji[i], gender[i%2], "198"+i);
+        }
+        return true;
+      }
+      records = cookieToRecords();
+      return false;
+    }
+
+    function login(id, pw){
+      var user = getUser(id);
+      if(user == null){
+        return false;
+      }else if(user.indexOf("pw:" + pw + ",") >= 0){
+        document.cookie = "loginId=" + id;
+        return true;
+      }else{
+        return false;
+      }
+    }
+
     function logout(){
       //有効期限を過去にして書き込む
-      cName = "uName="; // 削除するクッキー名
-      dTime = new Date();
+      var dTime = new Date();
       dTime.setYear(dTime.getYear() - 1);
-      document.cookie = "firstName=;expires=" + dTime.toGMTString();
-      document.cookie = "lastName=;expires=" + dTime.toGMTString();
+      document.cookie = "loginId=;expires=" + dTime.toGMTString();
+    }
+
+    function getLoginId(){
+      var loginId = document.cookie.match(/loginId[^;]*/)
+      if(loginId != null){
+        return loginId[0].replace("loginId=","")
+      }
+      else{
+        return null;
+      }
+    }
+
+    function insertUser(id, pw, fName, lName, gender, bYear){
+      var tmp = ["id:"+id,"pw:"+pw,"fName:"+fName,"lName:"+lName,"gender:"+gender,"bYear:"+bYear];
+      var record = "record" + ("0" + (records.length + 1)).slice(-2) + "=" + tmp.join();
+      records.push(record);
+      document.cookie = record;
+    }
+
+    function getUser(id){
+      for(var i = 0; i < records.length; i++){
+        if(records[i].indexOf("id:"+id+",") > 0){
+          return records[i];
+        }
+      }
+      return null;
+    }
+
+    function getUserData(id, key){
+      if(getUser(id) != null){
+        return getUser(id).match(new RegExp(key + ":[^,]*"))[0].replace(key + ":","");
+      }
+      else {
+        return null;
+      }
+    }
+
+    function cookieToRecords(){
+      var tmp_records = [];
+      var cookies = document.cookie.split("; ");
+      for(var i = 0; i < cookies.length; i++){
+        if(cookies[i].match(/record[0-9][0-9]/) != null){
+          tmp_records.push(cookies[i]);
+        }
+      }
+      return tmp_records;
+    }
+
+    function loginForm(){
+      var loginId = document.forms[0].loginId.value;
+      var password = document.forms[0].password.value;
+      if(login(loginId, password) == false){
+        document.getElementById("err_msg").innerHTML = "認証に失敗しました。";
+      }
+      else{
+        location.reload();
+      }
+    }
+
+    function writeLoginTop(loginId){
+      var lastName = getUserData(loginId,"lName")
+      var firstName = getUserData(loginId,"fName")
+      var text = "<p>ようこそ " + lastName + " " + firstName + " さん</p>";
+      text = text + '<p><a href="sample01top.html" onClick="logout()">ログアウト</a></p>';
+      document.getElementById("contents").innerHTML = text;
+    }
+
+    function writeOpenTop(){
+      var openTop = (function(){/*
+        <form name="login">
+          <div id="err_msg" style="color:red;"></div>
+          <div>ログインID : <input type="text" name="loginId"></div>
+          <div>パスワード : <input type="password" name="password"></div>
+          <div><input type="button" value="ログイン" onClick='loginForm()''></div>
+        </form>
+        <p><a href="sample01input.html">会員登録する</a></p>
+      */}).toString().match(/\/\*([^]*)\*\//)[1];
+      document.getElementById("contents").innerHTML = openTop;
     }
   -->
 </script>
@@ -21,16 +123,13 @@
   <div id="contents"></div>
   <script type="text/javascript">
     <!--
-      allCookies = document.cookie;
-      if(allCookies.indexOf("firstName") >= 0 && allCookies.indexOf("lastName") >= 0){
-        firstName = allCookies.match(/firstName=[^;]*/)[0].split("=")[1];
-        lastName = allCookies.match(/lastName=[^;]*/)[0].split("=")[1];
-        text = "<p>ようこそ " + lastName + " " + firstName + " さん</p>";
-        text = text + '<p><a href="sample01top.html" onClick="logout()">ログアウト</a></p>';
-        document.getElementById("contents").innerHTML = text;
+      initialize();
+      var loginId = getLoginId();
+      if(loginId == null){
+        writeOpenTop();
       }
       else{
-        document.getElementById("contents").innerHTML = '<p><a href="sample01input.html">会員登録する</a></p>';
+        writeLoginTop(loginId);
       }
     -->
   </script>

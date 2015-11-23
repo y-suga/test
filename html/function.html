@@ -1,10 +1,10 @@
 <script type="text/javascript">
   <!--
-    records = [];
     function initialize(){
       var kanji = ["零","一","二","三","四","五","六","七","八","九"]
       var gender = ["男性","女性"]
-      if(records.length == 0){
+      if(document.cookie.match(/record/) == null){
+        records = [];
         for(var i = 1; i < 6; i++){
           insertUser("id" + ("0" + i).slice(-2), "password", "テスト", kanji[i], gender[i%2], "198"+i);
         }
@@ -28,6 +28,16 @@
       var dTime = new Date();
       dTime.setYear(dTime.getYear() - 1);
       document.cookie = "loginId=;expires=" + dTime.toGMTString();
+    }
+
+    function getLoginId(){
+      var loginId = document.cookie.match(/loginId[^;]*/)
+      if(loginId != null){
+        return loginId[0].replace("loginId=","")
+      }
+      else{
+        return null;
+      }
     }
 
     function insertUser(id, pw, fName, lName, gender, bYear){
