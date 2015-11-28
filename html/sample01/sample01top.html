@@ -3,6 +3,22 @@
   body { background-color: #000000; color: #FFFFFF; }
   a { color: orange; text-decoration: none; }
   a:hover { text-decoration: underline }
+  .form__area {
+    border: solid 1px #444444;
+    width: 160px;
+    padding-left: 30px;
+  }
+  .login { margin-bottom: 20px;}
+  .login__label {
+    margin-bottom: 0px;
+  }
+  .login__button {
+    padding-left: 30px;
+    margin-bottom: 20px;
+  }
+  .err_msg{
+    color: red;
+  }
 </style>
 <script type="text/javascript">
   <!--
@@ -105,12 +121,20 @@
 
     function writeOpenTop(){
       var openTop = (function(){/*
-        <form name="login" action="" method="post">
-          <div id="err_msg" style="color:red;"></div>
-          <div>ログインID : <input type="text" name="loginId"></div>
-          <div>パスワード : <input type="password" name="password"></div>
-          <div><input type="submit" value="ログイン" onClick='loginForm()''></div>
-        </form>
+        <div class="form__area">
+          <form name="login">
+            <div class="login">
+              <p class="login__label">ログインID</p>
+              <input type="text" name="loginId">
+              <p class="login__label">パスワード</p>
+              <input type="password" name="password">
+            </div>
+            <p id="err_msg" class="err_msg"></p>
+            <div class="login__button">
+              <button type="submit" value="ログイン" onClick='loginForm()''>ログイン</button>
+            </div>
+          </form>
+        </div>
         <p><a href="sample01input.html">会員登録する</a></p>
       */}).toString().match(/\/\*([^]*)\*\//)[1];
       document.getElementById("contents").innerHTML = openTop;
