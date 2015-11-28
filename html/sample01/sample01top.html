@@ -23,11 +23,14 @@
     function login(id, pw){
       var user = getUser(id);
       if(user == null){
+        document.cookie = "failureLogin=true"
         return false;
       }else if(user.indexOf("pw:" + pw + ",") >= 0){
         document.cookie = "loginId=" + id;
+        document.cookie = "failureLogin=;"
         return true;
       }else{
+        document.cookie = "failureLogin=true"
         return false;
       }
     }
@@ -88,12 +91,8 @@
     function loginForm(){
       var loginId = document.forms[0].loginId.value;
       var password = document.forms[0].password.value;
-      if(login(loginId, password) == false){
-        document.getElementById("err_msg").innerHTML = "認証に失敗しました。";
-      }
-      else{
-        location.reload();
-      }
+      login(loginId, password)
+      location.href = location.href.replace(/[?].*/,"");
     }
 
     function writeLoginTop(loginId){
@@ -106,15 +105,19 @@
 
     function writeOpenTop(){
       var openTop = (function(){/*
-        <form name="login">
+        <form name="login" action="" method="post">
           <div id="err_msg" style="color:red;"></div>
           <div>ログインID : <input type="text" name="loginId"></div>
           <div>パスワード : <input type="password" name="password"></div>
-          <div><input type="button" value="ログイン" onClick='loginForm()''></div>
+          <div><input type="submit" value="ログイン" onClick='loginForm()''></div>
         </form>
         <p><a href="sample01input.html">会員登録する</a></p>
       */}).toString().match(/\/\*([^]*)\*\//)[1];
       document.getElementById("contents").innerHTML = openTop;
+      if(document.cookie.match(/failureLogin=true/ != null)){
+        document.getElementById("err_msg").innerHTML = "認証に失敗しました。";
+        document.cookie = "failureLogin=;"
+      }
     }
   -->
 </script>
